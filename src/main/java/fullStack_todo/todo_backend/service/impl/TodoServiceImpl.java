@@ -30,6 +30,6 @@ public class TodoServiceImpl implements TodoService {
         savedDto.setCompleted(savedEntity.isCompleted());
 
 
-        return todoDto;
+        return savedDto;
     }
 }
