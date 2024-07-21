@@ -2,6 +2,7 @@ package fullStack_todo.todo_backend.service.impl;
 
 import fullStack_todo.todo_backend.dto.TodoDto;
 import fullStack_todo.todo_backend.entity.TodoEntity;
+import fullStack_todo.todo_backend.exception.ResourceNotFoundException;
 import fullStack_todo.todo_backend.repository.TodoRepository;
 import fullStack_todo.todo_backend.service.TodoService;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoDto getTodo(Long todoId) {
 
-        TodoEntity todoEntity = todoRepository.findById(todoId).get();
+        TodoEntity todoEntity = todoRepository.findById(todoId).orElseThrow(
+                () -> new ResourceNotFoundException("The Todo with id " + todoId + " doesn't exist."));
         return modelMapper.map(todoEntity, TodoDto.class);
     }
 }
