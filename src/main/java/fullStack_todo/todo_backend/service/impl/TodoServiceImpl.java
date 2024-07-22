@@ -10,7 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @AllArgsConstructor
@@ -45,6 +45,22 @@ public class TodoServiceImpl implements TodoService {
         List<TodoDto> todoDtoList = allEntityTodos.stream()
                 .map(todoEntity -> modelMapper.map(todoEntity, TodoDto.class))
                 .toList();
+
         return todoDtoList;
+    }
+
+    @Override
+    public TodoDto updateTodo(TodoDto todoDto,Long todoId) {
+
+        TodoEntity todoEntityById = todoRepository.findById(todoId).orElseThrow(() ->
+                new ResourceNotFoundException("The todo item cannot be found"));
+
+        todoEntityById.setTitle(todoDto.getTitle());
+        todoEntityById.setDescription(todoDto.getDescription());
+        todoEntityById.setCompleted(todoEntityById.isCompleted());
+
+        TodoEntity saved = todoRepository.save(todoEntityById);
+
+        return modelMapper.map(saved, TodoDto.class);
     }
 }
