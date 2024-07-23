@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
+
 @Service
 @AllArgsConstructor
 public class TodoServiceImpl implements TodoService {
@@ -63,4 +64,14 @@ public class TodoServiceImpl implements TodoService {
 
         return modelMapper.map(saved, TodoDto.class);
     }
+
+    @Override
+    public void deleteTodo(Long id) {
+        todoRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("The todo cannot be found."));
+
+        todoRepository.deleteById(id);
+    }
+
+
 }
